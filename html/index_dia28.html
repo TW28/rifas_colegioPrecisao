@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+
+		<title>Rifas</title>
+		<link href="https://fonts.googleapis.com/css2?family=Castoro&display=swap" rel="stylesheet">
+
+		<style>
+			body{
+				background: linear-gradient(#DAA520, #666600);
+				background-attachment: fixed;
+				margin: 0 400px;
+
+				font-family: 'Roboto', sans-serif;
+
+				text-align: center;
+			}
+
+			
+			#logo{
+				display: block;
+				margin: 0 auto;
+			}
+			
+
+			h1{
+				text-align: center;
+
+				font-size: 25px;
+				font-weight: bold;
+
+				color:  #333300;
+
+			}
+
+			#caixa{
+				margin: 30px auto;
+				padding: 15px;
+				display: block;
+
+				font-size: 30px;
+			}
+
+			input{
+				display: block;
+				margin: 30px auto;
+				font-size: 30px;
+			}
+
+			#ponto{
+				color: red;
+				font-size: 20px;
+			}
+
+
+
+			@media screen and (max-width: 850px){
+				body{
+					background-size: 480px 2000px;
+
+					margin: 0;
+				}
+			}
+		</style>
+
+		<script>
+			var result_day = 28;
+
+			var vencedor = "379541";
+			///////////////////////Servidoor
+
+			var dt=new Date();
+			var day_now = dt.getDate();
+			var hour_now = dt.getHours();
+			var minutes_now = dt.getMinutes();
+			var seconds_now = dt.getSeconds();
+
+			var month_now = dt.getMonth();
+			////////////////////////
+			var digitado;
+
+			var uma = 0;
+
+			function enviar(){
+				digitado = document.getElementById('caixa').value;
+
+				document.getElementById('ponto').innerText = '';
+
+				if(digitado.length != 6){
+					document.getElementById('ponto').innerText = 'Número de carcteres inválido, o código deve ter 6 caracteres';
+					document.getElementById('ponto').style.color= 'red';
+				}
+				else{
+					resultado();
+				}
+			}
+
+			function resultado(){
+				document.getElementById('ponto').style.color = '#333300';
+				document.getElementById('ponto').style.fontSize = '25px';
+
+				if(result_day == day_now){
+
+					document.getElementById('ponto').innerText = "Resultado:";
+
+					if(digitado == vencedor){
+						document.getElementById('counter').innerText = "VENCEDOR!!";
+					}
+					else{
+						document.getElementById('counter').innerText = "PERDEDOR!!";
+					}
+				}
+				else{
+					document.getElementById('ponto').innerText = "O resultado será revelado dia 28/"+ (month_now + 1) +"/21!!";
+					contagem();
+				}
+
+			}
+
+			function contagem(){
+
+
+				var dd = result_day - day_now - 1;
+				var hh = 23 - hour_now;
+				var mm = 60 - minutes_now;
+				var ss = 60 - seconds_now;
+
+				var tempo = 1000;
+				var cron;
+					
+				if(uma == 0){
+					cron = setInterval(() => {  timer();}, tempo);
+					uma++;
+				}
+
+				function timer(){
+					ss--;
+					if(ss == -1){
+						ss = 59;
+						mm--;
+						if(mm == -1){
+							mm = 59;
+							hh--;
+							if(hh = -1){
+								hh = 23;
+								dd--;
+							}
+						}
+					}
+
+					var format = (dd < 10 ? "0" + dd : dd) + "     " + (hh < 10 ? '0' + hh : hh) + ":" + (mm < 10 ? '0' + mm : mm) + ":" + (ss < 10 ? '0' + ss : ss);
+					document.getElementById('counter').innerText = format;
+
+					if(dd < 0){
+						clearInterval(cron);
+						document.getElementById('counter').innerText = "PRESSIONE F5";
+					}
+				}
+			}
+		</script>
+	</head>	
+
+	<body>
+		<img src="http://localhost:3000/precisao.png" id="logo">
+
+		<h1>DIGITE O NÚMERO DA SUA RIFA:</h1>
+		<input type="text" maxlength="6" size="6" placeholder="xxxxxx" id="caixa">
+
+		<input type="submit" value="Enviar" id="confirm" onclick="enviar();">
+
+		<span id="ponto"></span>
+		<p id="counter" style="font-size: 50px;"></p>
+	</body>
+</html>
